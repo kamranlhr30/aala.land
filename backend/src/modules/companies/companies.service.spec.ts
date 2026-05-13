@@ -142,6 +142,12 @@ describe('CompaniesService', () => {
       expect(savedArg.activeRegions).toBeDefined();
     });
 
+    it('throws NotFoundException when company not found', async () => {
+      repo.findOne.mockResolvedValue(null);
+
+      await expect(service.update('bad-id', { name: 'X' })).rejects.toThrow(NotFoundException);
+    });
+
     it('validates activeRegions', async () => {
       repo.findOne.mockResolvedValue(mockCompany);
 
