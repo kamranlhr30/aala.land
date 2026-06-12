@@ -45,4 +45,5 @@ Router.map(function () {
   this.route('admin', function () {
     this.route('companies');
   });
+  this.route('not-found', { path: '/*path' });
 });
