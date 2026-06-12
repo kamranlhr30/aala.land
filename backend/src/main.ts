@@ -39,21 +39,25 @@ async function bootstrap() {
     }),
   );
 
-  // Swagger/OpenAPI Configuration
-  const config = new DocumentBuilder()
-    .setTitle('AALA.LAND API')
-    .setDescription('The Property Management SaaS for the Middle East')
-    .setVersion('1.0')
-    .addTag('aala')
-    .addBearerAuth()
-    .build();
-  
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('docs', app, document);
+  // Swagger — dev/staging only, never in production
+  if (process.env.NODE_ENV !== 'production') {
+    const config = new DocumentBuilder()
+      .setTitle('AALA.LAND API')
+      .setDescription('The Property Management SaaS for the Middle East')
+      .setVersion('1.0')
+      .addTag('aala')
+      .addBearerAuth()
+      .build();
+
+    const document = SwaggerModule.createDocument(app, config);
+    SwaggerModule.setup('docs', app, document);
+  }
 
   const port = process.env.PORT ?? 3010;
   await app.listen(port);
   console.log(`AALA.LAND Backend is breathing on: http://localhost:${port}/v1`);
-  console.log(`API Documentation: http://localhost:${port}/docs`);
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`API Documentation: http://localhost:${port}/docs`);
+  }
 }
 bootstrap();
